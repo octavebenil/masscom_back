@@ -1,0 +1,109 @@
+{
+  "_jquery-2f7cc6b8.js": {
+    "file": "assets/jquery-2f7cc6b8.js"
+  },
+  "resources/fonts/fa-brands-400.ttf": {
+    "file": "assets/fa-brands-400-b1d1c1b0.ttf",
+    "src": "resources/fonts/fa-brands-400.ttf"
+  },
+  "resources/fonts/fa-brands-400.woff2": {
+    "file": "assets/fa-brands-400-c61287c2.woff2",
+    "src": "resources/fonts/fa-brands-400.woff2"
+  },
+  "resources/fonts/fa-regular-400.ttf": {
+    "file": "assets/fa-regular-400-d7b19fe2.ttf",
+    "src": "resources/fonts/fa-regular-400.ttf"
+  },
+  "resources/fonts/fa-regular-400.woff2": {
+    "file": "assets/fa-regular-400-5da313b0.woff2",
+    "src": "resources/fonts/fa-regular-400.woff2"
+  },
+  "resources/fonts/fa-solid-900.ttf": {
+    "file": "assets/fa-solid-900-e4f6a7e9.ttf",
+    "src": "resources/fonts/fa-solid-900.ttf"
+  },
+  "resources/fonts/fa-solid-900.woff2": {
+    "file": "assets/fa-solid-900-8f06540f.woff2",
+    "src": "resources/fonts/fa-solid-900.woff2"
+  },
+  "resources/fonts/fa-v4compatibility.ttf": {
+    "file": "assets/fa-v4compatibility-2ddb3b41.ttf",
+    "src": "resources/fonts/fa-v4compatibility.ttf"
+  },
+  "resources/fonts/fa-v4compatibility.woff2": {
+    "file": "assets/fa-v4compatibility-f46715c9.woff2",
+    "src": "resources/fonts/fa-v4compatibility.woff2"
+  },
+  "resources/fonts/remixicon.eot": {
+    "file": "assets/remixicon-64bb3a0f.eot",
+    "src": "resources/fonts/remixicon.eot"
+  },
+  "resources/fonts/remixicon.svg": {
+    "file": "assets/remixicon-a10268fe.svg",
+    "src": "resources/fonts/remixicon.svg"
+  },
+  "resources/fonts/remixicon.ttf": {
+    "file": "assets/remixicon-0ac8bc3c.ttf",
+    "src": "resources/fonts/remixicon.ttf"
+  },
+  "resources/fonts/remixicon.woff": {
+    "file": "assets/remixicon-c2dacfbc.woff",
+    "src": "resources/fonts/remixicon.woff"
+  },
+  "resources/fonts/remixicon.woff2": {
+    "file": "assets/remixicon-e61f0d10.woff2",
+    "src": "resources/fonts/remixicon.woff2"
+  },
+  "resources/images/avatar.jpg": {
+    "file": "assets/avatar-7bb6ff2f.jpg",
+    "src": "resources/images/avatar.jpg"
+  },
+  "resources/images/logo.png": {
+    "file": "assets/logo-09b6faf0.png",
+    "src": "resources/images/logo.png"
+  },
+  "resources/images/logo.svg": {
+    "file": "assets/logo-e69aec5b.svg",
+    "src": "resources/images/logo.svg"
+  },
+  "resources/images/profile-img.png": {
+    "file": "assets/profile-img-711d39f0.png",
+    "src": "resources/images/profile-img.png"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-19e228b3.js",
+    "imports": [
+      "_jquery-2f7cc6b8.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  },
+  "resources/js/parsley.js": {
+    "file": "assets/parsley-2e5ba3b4.js",
+    "imports": [
+      "_jquery-2f7cc6b8.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/parsley.js"
+  },
+  "resources/scss/app-dark.scss": {
+    "file": "assets/app-dark-2beebd97.css",
+    "isEntry": true,
+    "src": "resources/scss/app-dark.scss"
+  },
+  "resources/scss/app.scss": {
+    "file": "assets/app-95c69b68.css",
+    "isEntry": true,
+    "src": "resources/scss/app.scss"
+  },
+  "resources/scss/bootstrap-dark.scss": {
+    "file": "assets/bootstrap-dark-17832f8d.css",
+    "isEntry": true,
+    "src": "resources/scss/bootstrap-dark.scss"
+  },
+  "resources/scss/bootstrap.scss": {
+    "file": "assets/bootstrap-7a185d61.css",
+    "isEntry": true,
+    "src": "resources/scss/bootstrap.scss"
+  }
+}

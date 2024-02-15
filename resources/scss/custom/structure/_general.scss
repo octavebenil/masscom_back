@@ -1,0 +1,45 @@
+.btn-min-width {
+    min-width: 120px;
+}
+
+.required:after {
+    content: " *";
+    color: #ff0000;
+}
+
+.placeholder-image {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background: $gray-500;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    object-fit: cover;
+
+    img {
+        max-height: 100%;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    .placeholder-overlay {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        background: $gray-700;
+        display: none;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+    }
+
+    &:hover .placeholder-overlay {
+        display: flex;
+    }
+
+}
