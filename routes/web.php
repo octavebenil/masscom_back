@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdvertisementController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -55,8 +56,8 @@ Route::middleware('auth:web')->group(function () {
         Route::get('{id}/view', [SurveyController::class, 'view'])->name('admin.surveys.view');
         Route::get('{id}/delete', [SurveyController::class, 'delete'])->name('admin.surveys.delete');
         Route::get('{id}/status/update', [SurveyController::class, 'updateStatus'])->name('admin.surveys.status');
-        Route::get('{id}/export-survey-pdf',[SurveyController::class,'exportChartPdf'])->name('export-chart-pdf');
-        Route::get('{id}/export-survey-csv',[SurveyController::class,'exportChartCsv'])->name('export-chart-csv');
+        Route::get('{id}/export-survey-pdf', [SurveyController::class, 'exportChartPdf'])->name('export-chart-pdf');
+        Route::get('{id}/export-survey-csv', [SurveyController::class, 'exportChartCsv'])->name('export-chart-csv');
     });
 
     Route::prefix('companies')->group(function () {
@@ -75,8 +76,16 @@ Route::middleware('auth:web')->group(function () {
         Route::get('{id}/delete', [AdminController::class, 'delete'])->name('admin.admins.delete');
     });
 
-    Route::get('/export-users',[UserController::class,'exportUsers'])->name('export-users');
-    Route::get('/export-users-pdf',[UserController::class,'exportUsersPdf'])->name('export-users-pdf');
+    Route::prefix('advertisement')->group(function () {
+        Route::get('', [AdvertisementController::class, 'index'])->name('admin.advertisement.list');
+        Route::get('create', [AdvertisementController::class, 'create'])->name('admin.advertisement.create');
+        Route::post('store', [AdvertisementController::class, 'store'])->name('admin.advertisement.store');
+        Route::get('{id}/edit', [AdvertisementController::class, 'edit'])->name('admin.advertisement.edit');
+        Route::get('{id}/delete', [AdvertisementController::class, 'delete'])->name('admin.advertisement.delete');
+    });
+
+    Route::get('/export-users', [UserController::class, 'exportUsers'])->name('export-users');
+    Route::get('/export-users-pdf', [UserController::class, 'exportUsersPdf'])->name('export-users-pdf');
 
 
     Route::get('survey_users', [SurveyUserController::class, 'index'])->name('admin.survey_users.list');

@@ -36,8 +36,6 @@ class AdminController extends Controller
         $data = $request->only(['name', 'email', 'password']);
 
 
-
-
         $data['password_text'] = $request->password;
         $data['password'] = bcrypt($request->password);
 
@@ -66,9 +64,9 @@ class AdminController extends Controller
     public function create(): Factory|\Illuminate\Foundation\Application|View|Application|RedirectResponse
     {
         try {
-
             return view('admin.admins.create');
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             Log::error($e);
             return back()->with(['error' => __('admin.default_error_message')]);
         }
@@ -85,7 +83,8 @@ class AdminController extends Controller
             $survey->delete();
 
             return ResponseBuilder::success(null, __('User deleted'));
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             Log::error($e);
             return back()->with(['error' => __('admin.default_error_message')]);
         }
@@ -99,10 +98,11 @@ class AdminController extends Controller
             if (!$admin) {
                 return back()->with('error', __('Introuvable'));
             }
-
+    
             $title = 'Update';
             return view('admin.admins.create', compact('title', 'admin'));
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             Log::error(request()->route()->getActionName() . ' | ' . $e->getMessage());
             return back()->with(['error' => __('messages.admin.default_error_message')]);
         }
