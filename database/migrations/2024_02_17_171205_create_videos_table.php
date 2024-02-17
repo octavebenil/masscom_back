@@ -10,14 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::dropIfExists('advertisements');
-
-        Schema::create('advertisements', static function (Blueprint $table) {
+        Schema::create('videos', static function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('max_views');
-            $table->unsignedBigInteger('current_views')->default(0);
-            $table->string('link');
+            $table->string('link_path');
+            $table->unsignedBigInteger('views')
+                  ->default(0);
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('advertisements');
+        Schema::dropIfExists('videos');
     }
 };

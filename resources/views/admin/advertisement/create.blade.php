@@ -18,17 +18,33 @@
                                 <label for="name" class="required">Name:</label>
                                 <input type="text" data-parsley-required="true" data-parsley-trigger="focusout"
                                        value="{{ old('name','') }}"
-                                       data-parsley-required-message="Please enter name" name="name" id="name"
+                                       name="name" id="name"
                                        class="form-control">
+                                @error('name')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                             </div>
-
                             <div class="col-md-6">
                                 <label for="link">The path for the cached data:</label>
                                 <input type="text" name="link" id="link"
                                        value="{{ old('link_text', '') }}"
-                                       data-parsley-required="true"
-                                       data-parsley-trigger="focusout"
+                                       placeholder="path"
                                        class="form-control">
+                                @error('link')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="max_views" class="required">Max views:</label>
+                                <input type="number" data-parsley-trigger="focusout"
+                                       value="{{ old('max_views','') }}"
+                                       step="1"
+                                       min="1"
+                                       name="max_views"
+                                       class="form-control">
+                                @error('max_views')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary my-2">Submit</button>

@@ -9,8 +9,6 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
 class SurveyDataTable extends DataTable
@@ -34,7 +32,6 @@ class SurveyDataTable extends DataTable
             })
             ->editColumn('remaining_users', function ($model) {
                 $total_answers = $model->answers()->distinct('user_id')->count();
-
                 return $model->max_participants - $total_answers;
             })
             ->editColumn('status', function ($model) {
@@ -61,7 +58,6 @@ class SurveyDataTable extends DataTable
                     ->setTableId('survey-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    //->dom('Bfrtip')
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([

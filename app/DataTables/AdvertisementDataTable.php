@@ -63,6 +63,8 @@ class AdvertisementDataTable extends DataTable
         return [
             Column::make('id'),
             Column::make('name'),
+            Column::make('current_views'),
+            Column::make('max_views'),
             Column::make('link'),
             Column::make('created_at'),
             Column::make('updated_at'),

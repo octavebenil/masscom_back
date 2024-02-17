@@ -18,13 +18,14 @@ class StoreAdvertisementRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
-            'link' => ['nullable', 'string']
+            'name'      => ['required', 'string'],
+            'link'      => ['required', 'string'],
+            'max_views' => ['required', 'numeric', 'min:1']
         ];
     }
 }

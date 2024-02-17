@@ -22,13 +22,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('', function () {
+Route::get('', static function () {
     return redirect()->route('admin.admins.list');
 });
 
 // Auth Routes
 Route::prefix('auth')->group(function () {
-    Route::get('', function () {
+    Route::get('', static function () {
         return redirect()->route('admin.login.get');
     });
 
@@ -44,7 +44,6 @@ Route::prefix('auth')->group(function () {
 
 Route::middleware('auth:web')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-
     Route::any('logout', [AuthController::class, 'logout'])->name('admin.logout');
 
 
@@ -80,8 +79,8 @@ Route::middleware('auth:web')->group(function () {
         Route::get('', [AdvertisementController::class, 'index'])->name('admin.advertisement.list');
         Route::get('create', [AdvertisementController::class, 'create'])->name('admin.advertisement.create');
         Route::post('store', [AdvertisementController::class, 'store'])->name('admin.advertisement.store');
-        Route::get('{id}/edit', [AdvertisementController::class, 'edit'])->name('admin.advertisement.edit');
-        Route::get('{id}/delete', [AdvertisementController::class, 'delete'])->name('admin.advertisement.delete');
+        Route::get('{advertisement}/edit', [AdvertisementController::class, 'edit'])->name('admin.advertisement.edit');
+        Route::get('{advertisement}/delete', [AdvertisementController::class, 'destroy'])->name('admin.advertisement.delete');
     });
 
     Route::get('/export-users', [UserController::class, 'exportUsers'])->name('export-users');
