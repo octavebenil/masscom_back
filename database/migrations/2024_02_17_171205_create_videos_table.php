@@ -13,7 +13,8 @@ return new class extends Migration {
         Schema::create('videos', static function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('link_path');
+            $table->string('link_path')
+                  ->nullable();
             $table->unsignedBigInteger('views')
                   ->default(0);
             $table->timestamps();

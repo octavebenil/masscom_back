@@ -24,6 +24,7 @@ class SurveyController extends Controller
                                ['is_closed', false]
                            ])
                            ->whereColumn('max_participants', '<=', 'current_participations')
+                           ->latest()
                            ->first();
 
         if (!$questions) {
