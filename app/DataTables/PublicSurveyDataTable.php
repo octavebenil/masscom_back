@@ -61,16 +61,9 @@ class PublicSurveyDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('title')->title('Survey Title'),
-            Column::make('company_name')->title('Company Name'),
-            Column::make('remaining_users')->title('Remaining users'),
-            Column::make('status')->title('Status'),
+            Column::make('title'),
+            Column::make('current_participations')->title('Current participations'),
+            Column::make('max_participants')->title('Max participants'),
         ];
     }
 

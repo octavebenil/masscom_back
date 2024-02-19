@@ -9,7 +9,6 @@ use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\Admin\SurveyController;
 use App\Http\Controllers\Admin\SurveyUserController;
 use App\Http\Controllers\Admin\UserController;
-use App\Models\Company;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,18 +23,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('public')->group(static function () {
-    Route::get('/{company}/surveys', [\App\Http\Controllers\Public\SurveyController::class, 'index']);
-});
-
-Route::get('test', static function () {
-    $surveys = Company::query()
-                      ->where('id', 1)
-                      ->with('surveys')
-                      ->get()
-                      ->pluck('surveys')
-                      ->flatten(1);
-
-    dd($surveys);
+    Route::get('/{company}/surveys', [\App\Http\Controllers\Public\SurveyController::class, 'index'])->name('public.company.statistics');
 });
 
 Route::get('', static function () {

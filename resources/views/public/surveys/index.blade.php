@@ -1,8 +1,8 @@
-@extends('admin.layouts.app')
+@extends('public.layouts.app')
 @section('title', 'Public')
 
 @section('content')
-    @include('admin.includes._breadcrumb', ['title' => 'Questions', 'items' => ['Home' => route('admin.dashboard'), 'Questions' => null]])
+    @include('admin.includes._breadcrumb', ['title' => 'Statistics', 'items' => ['Statistics' => null]])
     <div class="row">
         <div class="col-md-12 col-lg-12">
             <div class="card">

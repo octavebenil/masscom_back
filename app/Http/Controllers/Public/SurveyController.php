@@ -13,7 +13,7 @@ class SurveyController extends Controller
         $surveys = $company
             ->surveys;
 
-        return $dataTable->render('admin.surveys.index');
+        return $dataTable->render('public.surveys.index');
 
 //        return view('admin.surveys.index', compact('company', 'surveys'));
     }
