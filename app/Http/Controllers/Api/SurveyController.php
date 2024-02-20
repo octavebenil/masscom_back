@@ -23,7 +23,7 @@ class SurveyController extends Controller
                                ['is_active', true],
                                ['is_closed', false]
                            ])
-                           ->whereColumn('max_participants', '<=', 'current_participations')
+                           ->whereColumn('max_participants', '>=', 'current_participations')
                            ->latest()
                            ->first();
 

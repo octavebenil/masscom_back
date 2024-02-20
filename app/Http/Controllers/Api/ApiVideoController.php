@@ -6,12 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Video;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use JsonException;
 
 class ApiVideoController extends Controller
 {
+    /**
+     * @throws JsonException
+     */
     public function syncVideosFromLocal(Request $request): JsonResponse
     {
-        $data = collect($request->all());
+        $body = $request->get('body');
+        $data = collect(json_decode($body, false, 512, JSON_THROW_ON_ERROR));
 
         $videos = $data->groupBy('name')
                        ->map(function ($item) {

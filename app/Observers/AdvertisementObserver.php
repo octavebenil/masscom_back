@@ -7,18 +7,13 @@ use App\Models\Advertisement;
 class AdvertisementObserver
 {
     /**
-     * Handle the Advertisement "created" event.
-     */
-    public function created(Advertisement $advertisement): void
-    {
-        //
-    }
-
-    /**
      * Handle the Advertisement "updated" event.
      */
     public function updated(Advertisement $advertisement): void
     {
+        if ($advertisement->current_views >= $advertisement->max_views) {
+//            \Mail::to()->send(new );
+        }
     }
 
     /**

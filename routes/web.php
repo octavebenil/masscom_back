@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\Admin\SurveyController;
 use App\Http\Controllers\Admin\SurveyUserController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VideoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -85,6 +86,10 @@ Route::middleware('auth:web')->group(function () {
         Route::post('store', [AdvertisementController::class, 'store'])->name('admin.advertisement.store');
         Route::get('{advertisement}/edit', [AdvertisementController::class, 'edit'])->name('admin.advertisement.edit');
         Route::get('{advertisement}/delete', [AdvertisementController::class, 'destroy'])->name('admin.advertisement.delete');
+    });
+
+    Route::prefix('video')->group(function () {
+        Route::get('', [VideoController::class, 'index'])->name('admin.video.list');
     });
 
     Route::get('/export-users', [UserController::class, 'exportUsers'])->name('export-users');

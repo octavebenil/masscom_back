@@ -49,6 +49,13 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{route("admin.video.list")}}" class="waves-effect">
+                        <i class="fa-regular fa-video-camera"></i>
+                        <span>Videos</span>
+                    </a>
+                </li>
+
             </ul>
         </div>
 
