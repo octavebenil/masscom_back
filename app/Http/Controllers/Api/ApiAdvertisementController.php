@@ -7,6 +7,7 @@ use App\Http\Resources\AdvertisementResource;
 use App\Models\Advertisement;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use JsonException;
 
 class ApiAdvertisementController extends Controller
 {
@@ -20,18 +21,21 @@ class ApiAdvertisementController extends Controller
         return new AdvertisementResource($advertisement);
     }
 
+    /**
+     * @throws JsonException
+     */
     public function syncAdvertisementFromLocal(Request $request): JsonResponse
     {
-        $data = collect($request->all());
+        $data = collect(json_decode($request->get('body'), false, 512, JSON_THROW_ON_ERROR));
 
-        $advertisements = $data->groupBy('advertisement_id')
+        $advertisements = $data->groupBy('link')
                                ->map(function ($item) {
                                    return $item->count();
                                });
 
-        $advertisements->each(function ($count, $advertisement_id) {
-            $adv = Advertisement::findOrFail($advertisement_id);
-            $adv->update(['current_views' => $adv->current_views + $count]);
+        $advertisements->each(function ($count, $advertisement_link) {
+            $adv = Advertisement::whereLink($advertisement_link)->first();
+            $adv?->update(['current_views' => $adv?->current_views + $count]);
         });
 
         return response()->json();

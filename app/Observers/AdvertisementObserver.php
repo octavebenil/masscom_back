@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Models\Advertisement;
+use App\Models\User;
+use App\Notifications\CampaignFinished;
 
 class AdvertisementObserver
 {
@@ -12,31 +14,13 @@ class AdvertisementObserver
     public function updated(Advertisement $advertisement): void
     {
         if ($advertisement->current_views >= $advertisement->max_views) {
-//            \Mail::to()->send(new );
+            $admin = User::whereEmail('admin@masscom.com')->first();
+            $admin?->notify(
+                new CampaignFinished(
+                    "La campagne actuelle de publicité est terminée.",
+                    "admin.advertisement.list"
+                )
+            );
         }
-    }
-
-    /**
-     * Handle the Advertisement "deleted" event.
-     */
-    public function deleted(Advertisement $advertisement): void
-    {
-        //
-    }
-
-    /**
-     * Handle the Advertisement "restored" event.
-     */
-    public function restored(Advertisement $advertisement): void
-    {
-        //
-    }
-
-    /**
-     * Handle the Advertisement "force deleted" event.
-     */
-    public function forceDeleted(Advertisement $advertisement): void
-    {
-        //
     }
 }

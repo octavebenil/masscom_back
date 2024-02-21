@@ -7,9 +7,11 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
-                    <form id="form" action="{{route("admin.advertisement.store")}}" method="POST"
+                    <form id="form"
+                          action="{{route("admin.advertisement.update", ['advertisement'=>  $advertisement])}}"
+                          method="POST"
                           enctype="multipart/form-data"
-                          data-parsley-validate>
+                    >
                         @csrf
 
                         <div class="row">

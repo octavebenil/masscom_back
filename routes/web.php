@@ -51,7 +51,6 @@ Route::middleware('auth:web')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::any('logout', [AuthController::class, 'logout'])->name('admin.logout');
 
-
     Route::prefix('surveys')->group(function () {
         Route::get('', [SurveyController::class, 'index'])->name('admin.surveys.list');
         Route::get('create', [SurveyController::class, 'create'])->name('admin.surveys.create');
@@ -85,6 +84,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('create', [AdvertisementController::class, 'create'])->name('admin.advertisement.create');
         Route::post('store', [AdvertisementController::class, 'store'])->name('admin.advertisement.store');
         Route::get('{advertisement}/edit', [AdvertisementController::class, 'edit'])->name('admin.advertisement.edit');
+        Route::post('{advertisement}/update', [AdvertisementController::class, 'update'])->name('admin.advertisement.update');
         Route::get('{advertisement}/delete', [AdvertisementController::class, 'destroy'])->name('admin.advertisement.delete');
     });
 
