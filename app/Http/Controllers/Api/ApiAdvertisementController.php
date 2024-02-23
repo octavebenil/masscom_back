@@ -15,7 +15,7 @@ class ApiAdvertisementController extends Controller
     {
         $advertisement = Advertisement::query()
                                       ->notFinished()
-                                      ->latest()
+//                                      ->latest()
                                       ->firstOrfail();
 
         return new AdvertisementResource($advertisement);
