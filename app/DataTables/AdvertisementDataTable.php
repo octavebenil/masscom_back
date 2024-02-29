@@ -31,7 +31,7 @@ class AdvertisementDataTable extends DataTable
      */
     public function query(Advertisement $model): QueryBuilder
     {
-        return $model->query();
+        return $model->newQuery();
     }
 
     /**

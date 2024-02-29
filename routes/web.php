@@ -79,7 +79,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('{id}/delete', [AdminController::class, 'delete'])->name('admin.admins.delete');
     });
 
-    Route::prefix('advertisement')->group(function () {
+    Route::prefix('advertisements')->group(function () {
         Route::get('', [AdvertisementController::class, 'index'])->name('admin.advertisement.list');
         Route::get('create', [AdvertisementController::class, 'create'])->name('admin.advertisement.create');
         Route::post('store', [AdvertisementController::class, 'store'])->name('admin.advertisement.store');

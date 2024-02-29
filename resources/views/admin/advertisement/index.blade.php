@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Admins')
+@section('title', 'Advertisements')
 
 @section('content')
     @include('admin.includes._breadcrumb', ['title' => 'Advertisement', 'items' => ['Home' => route('admin.dashboard'), 'Advertisement' => null]])
@@ -25,5 +25,3 @@
 @push('scripts')
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 @endpush
-
-
