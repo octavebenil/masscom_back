@@ -10,6 +10,7 @@ use App\Models\Company;
 use App\Models\Question;
 use App\Models\QuestionOption;
 use App\Models\Survey;
+use App\Models\Winner;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -114,6 +115,57 @@ class SurveyController extends Controller
 
     }
 
+
+    public function winners(Request $request)
+    {
+        $surveyModel = Survey::query()->find($request->get('survey_id'));
+
+        if (!$surveyModel) {
+            return back()->with(['error' => __('admin.survey_not_found')]);
+        }
+
+        $data = $request->all();
+
+        $extension = $request->file('photo')->getClientOriginalExtension();
+        $name = $request->file('photo')->getClientOriginalName();
+        $name = Str::slug(explode('.', $name)[0]) . '-' . time() . '.' . $extension;
+        $path = 'uploads/surveys/winners';
+
+        $wins["survey_id"] = $surveyModel->id;
+        $wins["path"] = $path;
+        $wins['photo'] = $request->file('photo')->storePubliclyAs($path, $name);
+
+        Winner::query()->create([
+            "survey_id" => $wins["survey_id"],
+            "path" => $wins["path"],
+            "photo" => $wins["photo"],
+            "nom" => $data["nom"],
+            "prenoms" => isset($data["prenoms"]) ? $data["prenoms"] : "",
+            "adresse" => $data["adresse"],
+            "phone" => $data["phone"],
+        ]);
+
+        return back()->with(['success' => "Ajouter avec succès"]);
+
+    }
+
+    public function winners_delete($id): Response|RedirectResponse
+    {
+        try {
+            $winner = Winner::query()->find($id);
+            if (!$winner) {
+                return back()->with(['error' => "Oups !!! Non trouvé !"]);
+            }
+
+            $winner->delete();
+
+            return ResponseBuilder::success(null, __('admin.survey_deleted'));
+        } catch (Exception $e) {
+            Log::error($e);
+            return back()->with(['error' => __('admin.default_error_message')]);
+        }
+    }
+
     public function create(): Factory|\Illuminate\Foundation\Application|View|Application|RedirectResponse
     {
         try {
@@ -197,7 +249,9 @@ class SurveyController extends Controller
                 }
             }
 
-            return view('admin.surveys.view', compact('survey', 'charts'));
+            $winners = Winner::query()->where('survey_id', $survey->id)->get();
+
+            return view('admin.surveys.view', compact('survey', 'charts', 'winners'));
         } catch (Exception $e) {
             Log::error($e);
             return back()->with(['error' => __('admin.default_error_message')]);

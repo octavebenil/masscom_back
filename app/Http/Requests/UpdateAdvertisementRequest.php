@@ -24,7 +24,7 @@ class UpdateAdvertisementRequest extends FormRequest
     {
         return [
             'name'      => ['required', 'string'],
-            'link'      => ['required', 'string'],
+           // 'link'      => ['required', 'string'],
             'max_views' => ['required', 'numeric', 'min:1']
         ];
     }

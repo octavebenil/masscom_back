@@ -19,6 +19,7 @@
     "laravel/tinker": "^2.8",
     "maatwebsite/excel": "^3.1",
     "pcsaini/laravel-api-response-builder": "^1.5",
+    "symfony/filesystem": "^7.0",
     "yajra/laravel-datatables": "^10.0",
     "yajra/laravel-datatables-buttons": "^10.0"
   },

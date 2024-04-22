@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\SurveyUserController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VideoController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,21 @@ Route::prefix('public')->group(static function () {
 Route::get('', static function () {
     return redirect()->route('admin.admins.list');
 });
+
+Route::get('gagnants', [\App\Http\Controllers\Public\SurveyController::class, 'gagnants'])->name('gagnants');
+
+Route::get('/gagnants/{photo}', static function($photo){
+    // Construct the full path to the image within the storage directory
+    $path = storage_path($photo);
+
+//    // Check if the image exists; if not, return a 404 response
+//    if (!Storage::exists($path)) {
+//        abort(404);
+//    }
+
+    // Return the image as a response
+    return response()->file($path);
+})->name('gagnants.photo');
 
 // Auth Routes
 Route::prefix('auth')->group(function () {
@@ -57,6 +73,8 @@ Route::middleware('auth:web')->group(function () {
         Route::post('save', [SurveyController::class, 'save'])->name('admin.surveys.save');
         Route::get('{id}/edit', [SurveyController::class, 'edit'])->name('admin.surveys.edit');
         Route::get('{id}/view', [SurveyController::class, 'view'])->name('admin.surveys.view');
+        Route::post('winners', [SurveyController::class, 'winners'])->name('admin.surveys.winners');
+        Route::get('delete/{id}/winners', [SurveyController::class, 'winners_delete'])->name('admin.surveys.winners_delete');
         Route::get('{id}/delete', [SurveyController::class, 'delete'])->name('admin.surveys.delete');
         Route::get('{id}/status/update', [SurveyController::class, 'updateStatus'])->name('admin.surveys.status');
         Route::get('{id}/export-survey-pdf', [SurveyController::class, 'exportChartPdf'])->name('export-chart-pdf');

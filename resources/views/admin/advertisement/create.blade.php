@@ -25,8 +25,8 @@
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <label for="link">The path for the cached data:</label>
-                                <input type="text" name="link" id="link"
+                                <label for="link" class="required">Vidéo:</label>
+                                <input type="file" data-parsley-required="true" data-parsley-trigger="focusout" name="file" id="link"
                                        value="{{ old('link_text', '') }}"
                                        placeholder="path"
                                        class="form-control">
@@ -54,4 +54,3 @@
         </div>
     </div>
 @endsection
-

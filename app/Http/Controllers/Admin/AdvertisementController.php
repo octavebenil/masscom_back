@@ -29,7 +29,26 @@ class AdvertisementController extends Controller
      */
     public function store(StoreAdvertisementRequest $request): RedirectResponse
     {
-        Advertisement::create($request->validated());
+        $file_link = "";
+
+        $request->validate([
+            'file' => 'required|mimes:mp4,mpeg4,avi,mkv',
+        ]);
+
+        $file_link = $request->file('file')->store('advertisements');
+
+        $request->request->add(['link' => $file_link]);
+        $ads  = Advertisement::create([
+            "name" => $request->get("name"),
+            "max_views" => $request->get("max_views"),
+            "link" => $request->get("link"),
+        ]);
+
+        // $ads->name = $request->get("name");
+        // $ads->max_views = $request->get("max_views");
+        // $ads->link = $file_link;
+
+        // $ads->save();
 
         return redirect()->route('admin.advertisement.list');
     }
@@ -61,7 +80,20 @@ class AdvertisementController extends Controller
      */
     public function update(UpdateAdvertisementRequest $request, Advertisement $advertisement): RedirectResponse
     {
-        $advertisement->update($request->validated());
+        $file_link = "";
+
+        $request->validate([
+            'file' => 'required|mimes:mp4,mpeg4,avi,mkv',
+        ]);
+
+        $file_link = $request->file('file')->store('advertisements');
+
+        $request->request->add(['link' => $file_link]);
+        $ads  = Advertisement::update([
+            "name" => $request->get("name"),
+            "max_views" => $request->get("max_views"),
+            "link" => $request->get("link"),
+        ]);
 
         return redirect()->route('admin.advertisement.list');
     }
