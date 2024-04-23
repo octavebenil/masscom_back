@@ -129,7 +129,7 @@ class SurveyController extends Controller
         $extension = $request->file('photo')->getClientOriginalExtension();
         $name = $request->file('photo')->getClientOriginalName();
         $name = Str::slug(explode('.', $name)[0]) . '-' . time() . '.' . $extension;
-        $path = 'uploads/surveys/winners';
+        $path = 'public/winners';
 
         $wins["survey_id"] = $surveyModel->id;
         $wins["path"] = $path;
@@ -138,7 +138,7 @@ class SurveyController extends Controller
         Winner::query()->create([
             "survey_id" => $wins["survey_id"],
             "path" => $wins["path"],
-            "photo" => $wins["photo"],
+            "photo" => $name,
             "nom" => $data["nom"],
             "prenoms" => isset($data["prenoms"]) ? $data["prenoms"] : "",
             "adresse" => $data["adresse"],

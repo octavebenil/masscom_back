@@ -100,7 +100,7 @@
                                     <td>{{$win->adresse}}</td>
                                     <td>
                                         <div class='flex'>
-                                            <img src='/{{$win->photo}}' alt='{{$win->nom}}' width='40'/>
+                                            <img src='{{route("gagnants.photo",$win->photo)}}' alt='{{$win->nom}}' width='40'/>
                                         </div>
                                     </td>
                                     <td>

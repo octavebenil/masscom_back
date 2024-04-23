@@ -22,7 +22,9 @@ class User extends Authenticatable
         'email',
         'password',
         'survey_id',
-        'password_text'
+        'password_text',
+        'code_affiliation',
+        'code_parrain'
     ];
 
     /**

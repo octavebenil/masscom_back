@@ -8,6 +8,7 @@ use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Survey;
 use App\Models\User;
+use App\Models\Winner;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -38,14 +39,37 @@ class SurveyController extends Controller
         return ResponseBuilder::success($this->response);
     }
 
+
+    public function gagnants(): Response
+    {
+        $winners = Winner::all();
+
+        $gagnants = [];
+
+        if($winners){
+            foreach ($winners as $win){
+                $gagnants[] = [
+                    "caption" => $win->nom,
+                    "url" => route("gagnants.photo",$win->photo),
+                ];
+            }
+        }
+
+        $this->response->gagnants = $gagnants;
+
+        return ResponseBuilder::success($this->response);
+    }
+
     public function submit(Request $request): Response
     {
         $survey = Survey::query()->where("is_active", true)->first();
         $data = $request->selectedAnswer;
         $email = $request->email;
+        $code_parrain = isset($request->code_parrain) ? $request->code_parrain : null;
         $user = User::query()
                     ->create([
                         'email'     => $email,
+                        'code_parrain'  => $code_parrain,
                         'survey_id' => $survey->id
                     ]);
 
@@ -106,7 +130,7 @@ class SurveyController extends Controller
                     if ($survey->is_closed) {
                         return ResponseBuilder::error("Reached max participant", $this->badRequest);
                     }
-                    $user = $user->create(['email' => $d['email'], 'survey_id' => $survey->id]);
+                    $user = $user->create(['email' => $d['email'], 'code_parrain' => isset($d['code_parrain']) ? $d['code_parrain'] : null, 'survey_id' => $survey->id]);
 
                     $this->extracted($d['selectedAnswer'], $user);
                 }

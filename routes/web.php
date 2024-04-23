@@ -34,9 +34,9 @@ Route::get('', static function () {
 
 Route::get('gagnants', [\App\Http\Controllers\Public\SurveyController::class, 'gagnants'])->name('gagnants');
 
-Route::get('/gagnants/{photo}', static function($photo){
+Route::get('/winners_photo/{photo}', static function($photo){
     // Construct the full path to the image within the storage directory
-    $path = storage_path($photo);
+    $path = storage_path("app/public/winners/".$photo);
 
 //    // Check if the image exists; if not, return a 404 response
 //    if (!Storage::exists($path)) {

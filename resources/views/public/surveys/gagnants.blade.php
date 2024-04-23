@@ -20,7 +20,7 @@
                         @foreach($gagnants as $win)
                             <div class="col-md-3">
                                 <div class="img-place">
-                                    <img src="{{asset($win->photo)}}" alt="{{$win->nom}}" class="img-fluid"/>
+                                    <img src="{{route("gagnants.photo",$win->photo)}}" alt="{{$win->nom}}" class="img-fluid"/>
                                 </div>
                             </div>
                         @endforeach

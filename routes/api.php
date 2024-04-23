@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('questions', [SurveyController::class, 'index']);
+Route::get('gagnants', [SurveyController::class, 'gagnants']);
 Route::get('answers', [SurveyController::class, 'allDoneSurvey']);
 Route::get('videos', [SurveyController::class, 'videos']);
 
