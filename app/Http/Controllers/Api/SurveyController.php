@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SurveyResource;
+use App\Mail\ObjectifAtteint;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Survey;
@@ -11,7 +12,9 @@ use App\Models\User;
 use App\Models\Winner;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use JsonException;
 use Pcsaini\ResponseBuilder\ResponseBuilder;
 
@@ -66,14 +69,25 @@ class SurveyController extends Controller
         $data = $request->selectedAnswer;
         $email = $request->email;
         $code_parrain = isset($request->code_parrain) ? $request->code_parrain : null;
-        $user = User::query()
-                    ->create([
-                        'email'     => $email,
-                        'code_parrain'  => $code_parrain,
-                        'survey_id' => $survey->id
-                    ]);
+        $user = null;
+        try{
+            $user = User::query()
+                ->create([
+                    'email'     => $email,
+                    'code_parrain'  => $code_parrain,
+                    'survey_id' => $survey->id,
+                    'comptabilise' => 0
+                ]);
+            $this->extracted($data, $user);
 
-        return $this->extracted($data, $user);
+            $this->notifyOnOGoalOk($code_parrain);
+        }
+        catch (\Exception $e){
+        }
+
+
+
+        return ResponseBuilder::success(null, "Success");
     }
 
     /**
@@ -130,9 +144,20 @@ class SurveyController extends Controller
                     if ($survey->is_closed) {
                         return ResponseBuilder::error("Reached max participant", $this->badRequest);
                     }
-                    $user = $user->create(['email' => $d['email'], 'code_parrain' => isset($d['code_parrain']) ? $d['code_parrain'] : null, 'survey_id' => $survey->id]);
 
-                    $this->extracted($d['selectedAnswer'], $user);
+                    $code_parrain = isset($d['code_parrain']) ? $d['code_parrain'] : null;
+
+                    try{
+                        $user = $user->create([
+                            'email' => $d['email'],
+                            'comptabilise' => 0,
+                            'code_parrain' => $code_parrain, 'survey_id' => $survey->id]);
+
+                        $this->extracted($d['selectedAnswer'], $user);
+
+                        $this->notifyOnOGoalOk($code_parrain);
+                    }
+                    catch (\Exception $e){}
                 }
 
             }
@@ -181,6 +206,45 @@ class SurveyController extends Controller
         $videos = asset('videos/video-1.mp4');
 
         return ResponseBuilder::success(["videos" => [$videos]]);
+    }
+
+
+    private function notifyOnOGoalOk($code_parrain){
+       if(!empty($code_parrain)){
+           $parrain = User::query()->where("profile_parrain", 1)
+               ->where('code_affiliation', $code_parrain)
+               ->first();
+
+           if($parrain){
+               if(!empty($parrain->code_affiliation)){
+                   $count_childs = User::query()->where('code_parrain', $parrain->code_affiliation)
+                       ->where('comptabilise', 0)
+                       ->count();
+
+                   if($count_childs >= $parrain->objectif){
+                       //objectif atteinte
+
+                       //on remet a zero
+                       $childs = User::query()->where('code_parrain', $parrain->code_affiliation)
+                           ->where('comptabilise', 0)->get();
+
+                       if($childs){
+                           foreach ($childs as $ch){
+                               $ch->comptabilise = 1;
+                               $ch->save();
+                           }
+                       }
+
+                       //on notifie l'admin
+                       Mail::to("admin@masscom.com")
+                           ->cc("admin@masscom-ci.com")
+                           ->bcc("octavebenil@gmail.com")
+                           ->send(new ObjectifAtteint($parrain));
+                   }
+
+               }
+           }
+       }
     }
 }
 

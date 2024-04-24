@@ -35,6 +35,7 @@ class CampaignFinished extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
+            ->cc("octavebenil@gmail.com")
             ->line($this->firstLine)
             ->action('Voir ici', route($this->routeName));
     }

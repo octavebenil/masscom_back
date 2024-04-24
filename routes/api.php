@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApiAdvertisementController;
+use App\Http\Controllers\Api\ApiParentController;
 use App\Http\Controllers\Api\ApiVideoController;
 use App\Http\Controllers\Api\SurveyController;
 use Illuminate\Support\Facades\Route;
@@ -33,4 +34,12 @@ Route::prefix('advertisement')->group(function () {
 
 Route::prefix('videos')->group(function () {
     Route::post('sync', [ApiVideoController::class, 'syncVideosFromLocal']);
+});
+
+Route::prefix("parrain")->group(function () {
+   Route::get("next-code", [ApiParentController::class, "nextCode"])->name("next-code");
+
+    Route::post('submit', [ApiParentController::class, 'submit']);
+
+    Route::post('bulk-submit', [ApiParentController::class, 'bulkSubmit']);
 });

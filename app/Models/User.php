@@ -24,7 +24,10 @@ class User extends Authenticatable
         'survey_id',
         'password_text',
         'code_affiliation',
-        'code_parrain'
+        'code_parrain',
+        'commune',
+        'comptabilise',
+        'profile_parrain'
     ];
 
     /**

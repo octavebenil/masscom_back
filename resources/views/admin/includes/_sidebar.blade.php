@@ -56,6 +56,14 @@
                     </a>
                 </li>
 
+
+                <li>
+                    <a href="{{route("admin.parrainages.list")}}" class="waves-effect">
+                        <i class="fa-regular fa-user-group"></i>
+                        <span>Parrainages</span>
+                    </a>
+                </li>
+
             </ul>
         </div>
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdvertisementController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ParrainageController;
 use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\Admin\SurveyController;
 use App\Http\Controllers\Admin\SurveyUserController;
@@ -104,6 +105,17 @@ Route::middleware('auth:web')->group(function () {
         Route::get('{advertisement}/edit', [AdvertisementController::class, 'edit'])->name('admin.advertisement.edit');
         Route::post('{advertisement}/update', [AdvertisementController::class, 'update'])->name('admin.advertisement.update');
         Route::get('{advertisement}/delete', [AdvertisementController::class, 'destroy'])->name('admin.advertisement.delete');
+    });
+
+
+    Route::prefix('parrainage')->group(function () {
+        Route::get('', [ParrainageController::class, 'index'])->name('admin.parrainages.list');
+
+        Route::post('save', [ParrainageController::class, 'save'])->name('admin.parrainages.save');
+        Route::post('objectif', [ParrainageController::class, 'objectif'])->name('admin.parrainages.objectif');
+        Route::get('{id}/edit', [ParrainageController::class, 'edit'])->name('admin.parrainages.edit');
+        Route::get('{id}/delete', [ParrainageController::class, 'delete'])->name('admin.parrainages.delete');
+        Route::get('{id}/reset', [ParrainageController::class, 'reset'])->name('admin.parrainages.reset');
     });
 
     Route::prefix('video')->group(function () {

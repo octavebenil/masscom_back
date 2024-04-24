@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Models\Advertisement;
 use App\Models\Survey;
+use App\Models\User;
 use App\Observers\AdvertisementObserver;
+use App\Observers\ParrainageObserver;
 use App\Observers\SurveyObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -30,6 +32,7 @@ class EventServiceProvider extends ServiceProvider
     {
         Advertisement::observe(AdvertisementObserver::class);
         Survey::observe(SurveyObserver::class);
+//        User::observe(ParrainageObserver::class);
     }
 
     /**

@@ -4,16 +4,13 @@ namespace App\DataTables;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class SurveyUserDatatable extends DataTable
+class ParrainageDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -23,13 +20,19 @@ class SurveyUserDatatable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'user.action')
-            ->editColumn('survey_id', function ($model) {
-                $survey = $model->survey ?? '';
-                $surveyLink = $survey ? route('admin.surveys.view', ['id' => $survey->id]) : '#';
-                return '<a href="' . $surveyLink . '">' . ($survey ? $survey->title : 'N/A') . '</a>';
+            ->addColumn('action', function ($user) {
+                return view('admin.parrainages._action', compact('user'))->render();
             })
-            ->rawColumns(['survey_id'])
+            ->editColumn('childs', function ($model) {
+                $count_childs = 0;
+                if(!empty($model->code_affiliation)){
+                    $count_childs = User::query()->where("code_parrain", $model->code_affiliation)
+                        ->where("comptabilise", 0)
+                        ->count();
+                }
+                return $count_childs;
+            })
+            ->rawColumns(['status', 'action', 'company_name'])
             ->setRowId('id');
     }
 
@@ -38,7 +41,7 @@ class SurveyUserDatatable extends DataTable
      */
     public function query(User $model): QueryBuilder
     {
-        return $model->with('survey')->whereNotNull('survey_id')->where('profile_parrain', 0);
+        return $model->newQuery()->where('profile_parrain', 1);
     }
 
     /**
@@ -60,6 +63,10 @@ class SurveyUserDatatable extends DataTable
                 Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload')
+            ])
+            ->parameters([
+                'dom'          => 'Bfrtip',
+                'buttons'      => ['pdf'],
             ]);
     }
 
@@ -69,9 +76,18 @@ class SurveyUserDatatable extends DataTable
     public function getColumns(): array
     {
         return [
+            Column::computed('action')
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
             Column::make('id'),
-            Column::make('email')->title("Email"),
-            Column::make('survey_id')->title("Survey"),
+//            Column::make('name')->title("Nom"),
+            Column::make('code_affiliation')->title("Code de parrainage"),
+            Column::make('email')->title("Téléphone"),
+            Column::make('commune')->title("Commune"),
+            Column::make('childs')->title("Nombre des filleuls"),
+
         ];
     }
 
