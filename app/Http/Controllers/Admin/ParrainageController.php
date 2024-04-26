@@ -24,25 +24,65 @@ class ParrainageController extends Controller
     {
         $user = User::query()->where("profile_parrain", 1)->first();
 
-        $objectif = 0;
+        $objectif_1 = 0;
+        $lot_1 = 0;
+
+        $objectif_2 = 0;
+        $lot_2 = 0;
+
+        $objectif_3 = 0;
+        $lot_3 = 0;
 
         if($user){
-            $objectif = $user->objectif;
+            $objectif_1 = $user->objectif_1;
+            $lot_1 = $user->lot_1;
+
+            $objectif_2 = $user->objectif_2;
+            $lot_2 = $user->lot_2;
+
+            $objectif_3 = $user->objectif_3;
+            $lot_3 = $user->lot_3;
         }
 
-        return $dataTable->render('admin.parrainages.index', compact('objectif'));
+
+
+        return $dataTable->render('admin.parrainages.index', compact(
+            'objectif_1',
+                    'lot_1',
+
+            'objectif_2',
+            'lot_2',
+
+            'objectif_3',
+            'lot_3'
+        ));
     }
 
 
     public function objectif(Request $request): RedirectResponse
     {
-        $data = $request->only(['objectif']);
+        $data = $request->only([
+            'objectif_1',
+            'objectif_2',
+            'objectif_3',
+
+            'lot_1',
+            'lot_2',
+            'lot_3'
+
+        ]);
 
         $users = User::query()->where("profile_parrain", 1)->get();
 
         if($users){
             foreach ($users as $user){
-                $user->objectif = $data["objectif"];
+                $user->objectif_1 = $data["objectif_1"];
+                $user->objectif_2 = $data["objectif_2"];
+                $user->objectif_3 = $data["objectif_3"];
+
+                $user->lot_1 = $data["lot_1"];
+                $user->lot_2 = $data["lot_2"];
+                $user->lot_3 = $data["lot_3"];
                 $user->save();
             }
         }

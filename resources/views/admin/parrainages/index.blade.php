@@ -16,7 +16,12 @@
         <div class="col-md-12 col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <p>L'objectif maximal pour chaque parrain est de <strong>{{$objectif}}</strong></p>
+                    <p>L'objectif maximal pour chaque parrain est de :</p>
+                    <ul class="list">
+                        <li class="list-item"><strong>{{$objectif_1}}</strong> parrainages = <strong>{{$lot_1}}</strong> lots</li>
+                        <li class="list-item"><strong>{{$objectif_2}}</strong> parrainages = <strong>{{$lot_2}}</strong> lots</li>
+                        <li class="list-item"><strong>{{$objectif_3}}</strong> parrainages = <strong>{{$lot_3}}</strong> lots</li>
+                    </ul>
 
                     {{ $dataTable->table() }}
                 </div>
@@ -37,11 +42,51 @@
 
                         {{ csrf_field() }}
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="objectif">Objectif (Nombre maximal des personnes parrainnées)<span style="color: red;">*</span> </label>
-                                    <input type="number" min="1" step="1" name="objectif" id="objectif" class="form-control" value="{{$objectif}}"
+                                    <label for="objectif_1">Objectif 1 (Nombre maximal des personnes parrainnées)<span style="color: red;">*</span> </label>
+                                    <input type="number" min="1" step="1" name="objectif_1" id="objectif_1" class="form-control" value="{{$objectif_1}}"
                                            required="required"/>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="lot_1">Nombre des lots<span style="color: red;">*</span> </label>
+                                    <input type="number" min="1" step="1" name="lot_1" id="lot_1" class="form-control" value="{{$lot_1}}"
+                                           required="required"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="objectif_2">Objectif 2 </label>
+                                    <input type="number" min="1" step="1" name="objectif_2" id="objectif_2" class="form-control" value="{{$objectif_2}}"/>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="lot_2">Nombre des lots<span style="color: red;">*</span> </label>
+                                    <input type="number" min="1" step="1" name="lot_2" id="lot_2" class="form-control" value="{{$lot_2}}"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="objectif_3">Objectif 3 </label>
+                                    <input type="number" min="1" step="1" name="objectif_3" id="objectif_3" class="form-control" value="{{$objectif_3}}"/>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="lot_3">Nombre des lots<span style="color: red;">*</span> </label>
+                                    <input type="number" min="1" step="1" name="lot_3" id="lot_3" class="form-control" value="{{$lot_3}}"/>
                                 </div>
                             </div>
                         </div>

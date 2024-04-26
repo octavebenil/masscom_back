@@ -38,6 +38,7 @@ Route::prefix('videos')->group(function () {
 
 Route::prefix("parrain")->group(function () {
    Route::get("next-code", [ApiParentController::class, "nextCode"])->name("next-code");
+   Route::get("objectif", [ApiParentController::class, "objectif"])->name("objectif");
 
     Route::post('submit', [ApiParentController::class, 'submit']);
 

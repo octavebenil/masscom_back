@@ -16,12 +16,17 @@ class ObjectifAtteint extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
+
+    public $objectif;
+    public $lot;
     /**
      * Create a new message instance.
      */
-    public function __construct(User $user)
+    public function __construct(User $user, $objectif, $lot)
     {
         $this->user = $user;
+        $this->objectif = $objectif;
+        $this->lot = $lot;
     }
 
     /**

@@ -46,6 +46,53 @@ class ApiParentController extends Controller
         return ResponseBuilder::success($this->response);
     }
 
+    public function objectif(Request $request): Response
+    {
+
+        $user = User::query()->where("profile_parrain", 1)->first();
+
+        $objectif_1 = 0;
+        $lot_1 = 0;
+
+        $objectif_2 = 0;
+        $lot_2 = 0;
+
+        $objectif_3 = 0;
+        $lot_3 = 0;
+
+        if($user){
+            $objectif_1 = $user->objectif_1;
+            $lot_1 = $user->lot_1;
+
+            $objectif_2 = $user->objectif_2;
+            $lot_2 = $user->lot_2;
+
+            $objectif_3 = $user->objectif_3;
+            $lot_3 = $user->lot_3;
+        }
+
+        $obj1 = new \stdClass();
+
+        $obj1->objectif = $objectif_1;
+        $obj1->lot = $lot_1;
+
+
+        $obj2 = new \stdClass();
+
+        $obj2->objectif = $objectif_2;
+        $obj2->lot = $lot_2;
+
+
+        $obj3 = new \stdClass();
+
+        $obj3->objectif = $objectif_3;
+        $obj3->lot = $lot_3;
+
+        $this->response->objectifs = [$obj1, $obj2, $obj3];
+
+        return ResponseBuilder::success($this->response);
+    }
+
     public function submit(Request $request): Response
     {
         $survey = Survey::query()->where("is_active", true)->first();
