@@ -18,9 +18,10 @@
                 <div class="card-body">
                     <p>L'objectif maximal pour chaque parrain est de :</p>
                     <ul class="list">
-                        <li class="list-item"><strong>{{$objectif_1}}</strong> parrainages = <strong>{{$lot_1}}</strong> lots</li>
-                        <li class="list-item"><strong>{{$objectif_2}}</strong> parrainages = <strong>{{$lot_2}}</strong> lots</li>
-                        <li class="list-item"><strong>{{$objectif_3}}</strong> parrainages = <strong>{{$lot_3}}</strong> lots</li>
+                        <li class="list-item"><strong>{{$objectif_1}}</strong> parrainages = Lot valeur <strong>{{number_format($lot_1, 0, ".", " ")}}</strong> CFA</li>
+                        <li class="list-item"><strong>{{$objectif_2}}</strong> parrainages = Lot valeur <strong>{{number_format($lot_2, 0, ".", " ")}}</strong> CFA</li>
+                        <li class="list-item"><strong>{{$objectif_3}}</strong> parrainages = Lot valeur <strong>{{number_format($lot_3, 0, ".", " ")}}</strong> CFA</li>
+                        <li class="list-item"><strong>{{$objectif_4}}</strong> parrainages = Lot valeur <strong>{{number_format($lot_4, 0, ".", " ")}}</strong> CFA</li>
                     </ul>
 
                     {{ $dataTable->table() }}
@@ -52,7 +53,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="lot_1">Nombre des lots<span style="color: red;">*</span> </label>
+                                    <label for="lot_1">Nombre (ou Prix) des lots<span style="color: red;">*</span> </label>
                                     <input type="number" min="1" step="1" name="lot_1" id="lot_1" class="form-control" value="{{$lot_1}}"
                                            required="required"/>
                                 </div>
@@ -69,7 +70,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="lot_2">Nombre des lots<span style="color: red;">*</span> </label>
+                                    <label for="lot_2">Nombre (ou Prix) des lots<span style="color: red;">*</span> </label>
                                     <input type="number" min="1" step="1" name="lot_2" id="lot_2" class="form-control" value="{{$lot_2}}"/>
                                 </div>
                             </div>
@@ -85,8 +86,25 @@
 
                             <div class="col-md-6">
                                 <div class="form-group mt-3">
-                                    <label for="lot_3">Nombre des lots<span style="color: red;">*</span> </label>
+                                    <label for="lot_3">Nombre (ou Prix) des lots<span style="color: red;">*</span> </label>
                                     <input type="number" min="1" step="1" name="lot_3" id="lot_3" class="form-control" value="{{$lot_3}}"/>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="objectif_4">Objectif 4 </label>
+                                    <input type="number" min="1" step="1" name="objectif_4" id="objectif_4" class="form-control" value="{{$objectif_4}}"/>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mt-3">
+                                    <label for="lot_4">Nombre (ou Prix) des lots<span style="color: red;">*</span> </label>
+                                    <input type="number" min="1" step="1" name="lot_4" id="lot_4" class="form-control" value="{{$lot_4}}"/>
                                 </div>
                             </div>
                         </div>

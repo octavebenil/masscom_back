@@ -33,6 +33,9 @@ class ParrainageController extends Controller
         $objectif_3 = 0;
         $lot_3 = 0;
 
+        $objectif_4 = 0;
+        $lot_4 = 0;
+
         if($user){
             $objectif_1 = $user->objectif_1;
             $lot_1 = $user->lot_1;
@@ -42,6 +45,9 @@ class ParrainageController extends Controller
 
             $objectif_3 = $user->objectif_3;
             $lot_3 = $user->lot_3;
+
+            $objectif_4 = $user->objectif_4;
+            $lot_4 = $user->lot_4;
         }
 
 
@@ -54,7 +60,10 @@ class ParrainageController extends Controller
             'lot_2',
 
             'objectif_3',
-            'lot_3'
+            'lot_3',
+
+            'objectif_4',
+            'lot_4'
         ));
     }
 
@@ -65,10 +74,12 @@ class ParrainageController extends Controller
             'objectif_1',
             'objectif_2',
             'objectif_3',
+            'objectif_4',
 
             'lot_1',
             'lot_2',
-            'lot_3'
+            'lot_3',
+            'lot_4'
 
         ]);
 
@@ -79,10 +90,12 @@ class ParrainageController extends Controller
                 $user->objectif_1 = $data["objectif_1"];
                 $user->objectif_2 = $data["objectif_2"];
                 $user->objectif_3 = $data["objectif_3"];
+                $user->objectif_4 = $data["objectif_4"];
 
                 $user->lot_1 = $data["lot_1"];
                 $user->lot_2 = $data["lot_2"];
                 $user->lot_3 = $data["lot_3"];
+                $user->lot_4 = $data["lot_4"];
                 $user->save();
             }
         }

@@ -20,7 +20,7 @@ use Pcsaini\ResponseBuilder\ResponseBuilder;
 
 class SurveyController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $questions = Survey::query()
                            ->where([
@@ -30,6 +30,94 @@ class SurveyController extends Controller
                            ->whereColumn('max_participants', '>=', 'current_participations')
                            ->latest()
                            ->first();
+
+        $questionsDoByUsers = Survey::query()
+                    ->where([
+//                        ['is_active', true],
+                        ['is_closed', false]
+                    ])
+                    ->whereColumn('max_participants', '>=', 'current_participations')
+                    ->get();
+
+        $email = isset($request->email) ? $request->email : null;
+
+        if($email != null && $email != ""){
+            if ($questionsDoByUsers) {
+
+                $alreadyParticipeds = [];
+
+                foreach ($questionsDoByUsers as $quest){
+
+//                    'survey_id'        => $survey->id,
+//                'user_id'          => $user->id,
+//                'question_id'      => $d['question'],
+                    $user = User::query()->where('email', $email)->first();
+
+                    if($user){
+                        $anwser_exist = Answer::query()
+                                                ->where("survey_id", $quest->id)
+                                                ->where("user_id", $user->id)
+                                                ->exists();
+                        if($anwser_exist){
+                            $alreadyParticipeds[] = $quest->id;
+                        }
+                    }
+
+                }
+                //on recupère le survey suivant
+                $questions = Survey::query()
+                    ->where([
+//                            ['is_active', true],
+                        ['is_closed', false]
+                    ])
+                    ->whereColumn('max_participants', '>=', 'current_participations')
+                    ->whereNotIn("id", $alreadyParticipeds)
+                    ->latest()
+                    ->first();
+            }
+        }
+
+        if (!$questions) {
+            $this->response->questions = [
+                "max_part" => 0
+            ];
+        } else {
+            $this->response->questions = new SurveyResource($questions);
+        }
+
+        return ResponseBuilder::success($this->response);
+    }
+
+    public function next_survey(Request $request): Response
+    {
+        $questions = Survey::query()
+            ->where([
+//                ['is_active', true],
+                ['is_closed', false]
+            ])
+            ->whereColumn('max_participants', '>=', 'current_participations')
+            ->latest()
+            ->first();
+
+        if ($questions) {
+            $result = User::query()->where('survey_id', $questions->id)->where('email', $request->email)->first();
+
+            if ($result) {
+                //on recupère le survey suivant
+
+
+                $questions = Survey::query()
+                    ->where([
+                        ['is_active', true],
+                        ['is_closed', false]
+                    ])
+                    ->whereColumn('max_participants', '>=', 'current_participations')
+                    ->where("id", "!=", $questions->id)
+                    ->latest()
+                    ->first();
+            }
+        }
+
 
         if (!$questions) {
             $this->response->questions = [
@@ -65,7 +153,7 @@ class SurveyController extends Controller
 
     public function submit(Request $request): Response
     {
-        $survey = Survey::query()->where("is_active", true)->first();
+        $survey = Survey::query()->where("id", $request->surveyId)->first();
         $data = $request->selectedAnswer;
         $email = $request->email;
         $code_parrain = isset($request->code_parrain) ? $request->code_parrain : null;
@@ -82,43 +170,53 @@ class SurveyController extends Controller
                 $code_parrain = null;
             }
 
-            $user = User::query()->where("profile_parrain", 1)->first();
+            $userParrain = User::query()->where("profile_parrain", 1)->first();
 
-            $objectif_1 = 0;
-            $lot_1 = 0;
+            $objectif_1 = 100;
+            $lot_1 = 1;
 
-            $objectif_2 = 0;
-            $lot_2 = 0;
+            $objectif_2 = 200;
+            $lot_2 = 2;
 
-            $objectif_3 = 0;
-            $lot_3 = 0;
+            $objectif_3 = 300;
+            $lot_3 = 3;
 
-            if($user){
-                $objectif_1 = $user->objectif_1;
-                $lot_1 = $user->lot_1;
+            if($userParrain){
+                $objectif_1 = $userParrain->objectif_1;
+                $lot_1 = $userParrain->lot_1;
 
-                $objectif_2 = $user->objectif_2;
-                $lot_2 = $user->lot_2;
+                $objectif_2 = $userParrain->objectif_2;
+                $lot_2 = $userParrain->lot_2;
 
-                $objectif_3 = $user->objectif_3;
-                $lot_3 = $user->lot_3;
+                $objectif_3 = $userParrain->objectif_3;
+                $lot_3 = $userParrain->lot_3;
             }
 
-            $user = User::query()
-                ->create([
-                    'email'     => $email,
-                    'code_parrain'  => $code_parrain,
-                    'survey_id' => $survey->id,
-                    'comptabilise' => 0,
-                    'objectif_1' => $objectif_1,
-                    'objectif_2' => $objectif_2,
-                    'objectif_3' => $objectif_3,
+            $user = User::query()->where("email", $email)->first();
 
-                    'lot_1' => $lot_1,
-                    'lot_2' => $lot_2,
-                    'lot_3' => $lot_3
-                ]);
-            $this->extracted($data, $user);
+            if(empty($user)){
+                $user = User::query()
+                    ->create([
+                        'email'     => $email,
+                        'code_parrain'  => $code_parrain,
+                        'survey_id' => $survey->id,
+                        'comptabilise' => 0,
+                        'objectif_1' => $objectif_1,
+                        'objectif_2' => $objectif_2,
+                        'objectif_3' => $objectif_3,
+
+                        'lot_1' => $lot_1,
+                        'lot_2' => $lot_2,
+                        'lot_3' => $lot_3
+                    ]);
+            }
+            else{
+                $user->survey_id = $survey->id;
+                $user->save();
+            }
+
+
+            $this->extracted($survey, $data, $user);
 
             $this->notifyOnOGoalOk($code_parrain);
         }
@@ -136,13 +234,13 @@ class SurveyController extends Controller
      * @return Response
      * @throws JsonException
      */
-    public function extracted(mixed $data, $user): Response
+    public function extracted($survey, mixed $data, $user): Response
     {
         $answer = Answer::query();
 
-        $survey = Survey::query()
-                        ->where("is_active", true)
-                        ->first();
+//        $survey = Survey::query()
+//                        ->where("is_active", true)
+//                        ->first();
 
         foreach ($data as $d) {
             $question = Question::query()->find($d['question']);
@@ -176,7 +274,7 @@ class SurveyController extends Controller
         $user = User::query();
 
         foreach ($data as $d) {
-            $survey = Survey::query()->where("is_active", true)->first();
+            $survey = Survey::query()->where("id", $d["surveyId"])->first();
             Log::error($survey->is_closed);
 
             if (array_key_exists('surveyId', $d)) {
@@ -199,45 +297,53 @@ class SurveyController extends Controller
                             $code_parrain = null;
                         }
 
-                        $user = User::query()->where("profile_parrain", 1)->first();
+                        $userParrain = User::query()->where("profile_parrain", 1)->first();
 
-                        $objectif_1 = 0;
-                        $lot_1 = 0;
+                        $objectif_1 = 100;
+                        $lot_1 = 1;
 
-                        $objectif_2 = 0;
-                        $lot_2 = 0;
+                        $objectif_2 = 200;
+                        $lot_2 = 2;
 
-                        $objectif_3 = 0;
-                        $lot_3 = 0;
+                        $objectif_3 = 300;
+                        $lot_3 = 3;
 
-                        if($user){
-                            $objectif_1 = $user->objectif_1;
-                            $lot_1 = $user->lot_1;
+                        if($userParrain){
+                            $objectif_1 = $userParrain->objectif_1;
+                            $lot_1 = $userParrain->lot_1;
 
-                            $objectif_2 = $user->objectif_2;
-                            $lot_2 = $user->lot_2;
+                            $objectif_2 = $userParrain->objectif_2;
+                            $lot_2 = $userParrain->lot_2;
 
-                            $objectif_3 = $user->objectif_3;
-                            $lot_3 = $user->lot_3;
+                            $objectif_3 = $userParrain->objectif_3;
+                            $lot_3 = $userParrain->lot_3;
                         }
 
-                        $user = $user->create([
-                            'email' => $d['email'],
-                            'comptabilise' => 0,
-                            'code_parrain' => $code_parrain,
-                            'survey_id' => $survey->id,
+                        $user = User::query()->where("email", $d['email'])->first();
 
-                            'objectif_1' => $objectif_1,
-                            'objectif_2' => $objectif_2,
-                            'objectif_3' => $objectif_3,
+                        if(empty($user)) {
+                            $user = $user->create([
+                                'email' => $d['email'],
+                                'comptabilise' => 0,
+                                'code_parrain' => $code_parrain,
+                                'survey_id' => $survey->id,
 
-                            'lot_1' => $lot_1,
-                            'lot_2' => $lot_2,
-                            'lot_3' => $lot_3
+                                'objectif_1' => $objectif_1,
+                                'objectif_2' => $objectif_2,
+                                'objectif_3' => $objectif_3,
+
+                                'lot_1' => $lot_1,
+                                'lot_2' => $lot_2,
+                                'lot_3' => $lot_3
 
                             ]);
+                        }
+                        else{
+                            $user->survey_id = $survey->id;
+                            $user->save();
+                        }
 
-                        $this->extracted($d['selectedAnswer'], $user);
+                        $this->extracted($survey, $d['selectedAnswer'], $user);
 
                         $this->notifyOnOGoalOk($code_parrain);
                     }
@@ -311,11 +417,13 @@ class SurveyController extends Controller
                        $objectif = $parrain->objectif_1;
                        $lot = $parrain->lot_1;
 
-                       //on notifie l'admin
-                       Mail::to("admin@masscom.com")
-                           ->cc("admin@masscom-ci.com")
-                           ->bcc("octavebenil@gmail.com")
-                           ->send(new ObjectifAtteint($parrain, $objectif, $lot));
+                     if($objectif > 0){
+                         //on notifie l'admin
+                         Mail::to("alehible@gmail.com")
+                             ->cc("admin@masscom.com")
+                             ->bcc("octavebenil@gmail.com")
+                             ->send(new ObjectifAtteint($parrain, $objectif, $lot));
+                     }
                    }
                    else if($count_childs == $parrain->objectif_2){
                        //objectif atteinte
@@ -323,11 +431,13 @@ class SurveyController extends Controller
                        $objectif = $parrain->objectif_2;
                        $lot = $parrain->lot_2;
 
-                       //on notifie l'admin
-                       Mail::to("admin@masscom.com")
-                           ->cc("admin@masscom-ci.com")
-                           ->bcc("octavebenil@gmail.com")
-                           ->send(new ObjectifAtteint($parrain, $objectif, $lot));
+                      if($objectif > 0){
+                          //on notifie l'admin
+                          Mail::to("alehible@gmail.com")
+                              ->cc("admin@masscom.com")
+                              ->bcc("octavebenil@gmail.com")
+                              ->send(new ObjectifAtteint($parrain, $objectif, $lot));
+                      }
                    }
                    else if($count_childs >= $parrain->objectif_3){
                        //objectif atteinte
@@ -346,11 +456,38 @@ class SurveyController extends Controller
                            }
                        }
 
-                       //on notifie l'admin
-                       Mail::to("admin@masscom.com")
-                           ->cc("admin@masscom-ci.com")
-                           ->bcc("octavebenil@gmail.com")
-                           ->send(new ObjectifAtteint($parrain, $objectif, $lot));
+                      if($objectif > 0){
+                          //on notifie l'admin
+                          Mail::to("alehible@gmail.com")
+                              ->cc("admin@masscom.com")
+                              ->bcc("octavebenil@gmail.com")
+                              ->send(new ObjectifAtteint($parrain, $objectif, $lot));
+                      }
+                   }
+                   else if($count_childs >= $parrain->objectif_4){
+                       //objectif atteinte
+
+                       $objectif = $parrain->objectif_4;
+                       $lot = $parrain->lot_4;
+
+                       //on remet a zero seulement si les 03 objectifs on été atteinte
+                       $childs = User::query()->where('code_parrain', $parrain->code_affiliation)
+                           ->where('comptabilise', 0)->get();
+
+                       if($childs){
+                           foreach ($childs as $ch){
+                               $ch->comptabilise = 1;
+                               $ch->save();
+                           }
+                       }
+
+                       if($objectif > 0){
+                           //on notifie l'admin
+                           Mail::to("alehible@gmail.com")
+                               ->cc("admin@masscom.com")
+                               ->bcc("octavebenil@gmail.com")
+                               ->send(new ObjectifAtteint($parrain, $objectif, $lot));
+                       }
                    }
 
                }

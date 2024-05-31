@@ -25,6 +25,7 @@ Route::get('videos', [SurveyController::class, 'videos']);
 Route::post('submit', [SurveyController::class, 'submit']);
 
 Route::post('check_email', [SurveyController::class, 'checkEmail']);
+Route::post('next_survey', [SurveyController::class, 'next_survey']);
 Route::post('bulk-submit', [SurveyController::class, 'bulkSubmit']);
 
 Route::prefix('advertisement')->group(function () {
@@ -44,3 +45,4 @@ Route::prefix("parrain")->group(function () {
 
     Route::post('bulk-submit', [ApiParentController::class, 'bulkSubmit']);
 });
+
