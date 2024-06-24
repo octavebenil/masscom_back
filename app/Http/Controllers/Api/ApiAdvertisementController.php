@@ -24,6 +24,7 @@ class ApiAdvertisementController extends Controller
     public function countAdvertisement(Request $request): JsonResponse{
         $advertisement = Advertisement::query()
             ->notFinished()
+//            ->latest()
             ->firstOrfail();
 
         $advertisement?->update(['current_views' => $advertisement?->current_views + 1]);
