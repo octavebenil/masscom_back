@@ -30,6 +30,7 @@ Route::post('bulk-submit', [SurveyController::class, 'bulkSubmit']);
 
 Route::prefix('advertisement')->group(function () {
     Route::get('latest', [ApiAdvertisementController::class, 'latest']);
+    Route::get('count', [ApiAdvertisementController::class, 'countAdvertisement']);
     Route::post('sync', [ApiAdvertisementController::class, 'syncAdvertisementFromLocal']);
 });
 

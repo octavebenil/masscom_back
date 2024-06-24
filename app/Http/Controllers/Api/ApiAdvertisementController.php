@@ -21,6 +21,16 @@ class ApiAdvertisementController extends Controller
         return new AdvertisementResource($advertisement);
     }
 
+    public function countAdvertisement(Request $request): JsonResponse{
+        $advertisement = Advertisement::query()
+            ->notFinished()
+            ->firstOrfail();
+
+        $advertisement?->update(['current_views' => $advertisement?->current_views + 1]);
+
+        return response()->json();
+    }
+
     /**
      * @throws JsonException
      */
